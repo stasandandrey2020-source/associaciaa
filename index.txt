@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ассоциация выпускников</title>
+  <style>
+    :root {
+      --white: #ffffff;
+      --offwhite: #fafafa;
+      --lightgray: #f5f5f5;
+      --red-primary: #dc2626;
+      --red-light: #ef4444;
+      --red-dark: #b91c1c;
+      --gray: #6b7280;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--white);
+      color: #111827;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* HEADER - белый с красной линией */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 3px solid var(--red-primary);
+      box-shadow: var(--shadow);
+      padding: 1rem 2rem;
+    }
+
+    .header-row {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--red-primary);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .logo-wrapper:hover {
+      background: var(--red-primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: #374151;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--red-primary);
+      background: #fef2f2;
+    }
+
+    /* AUTH & PROFILE */
+    .right-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #fef2f2;
+      border: 2px solid var(--red-light);
+      padding: 0.75rem 1.25rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      color: var(--red-primary);
+    }
+
+    .profile-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--red-primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: var(--red-primary);
+      color: white;
+      border-color: var(--red-primary);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--red-primary);
+      border-color: var(--red-light);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-primary:hover {
+      background: var(--red-dark);
+      border-color: var(--red-dark);
+    }
+
+    /* MAIN */
+    main {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #111827;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--red-primary);
+      border-radius: 2px;
+    }
+
+    /* CARDS - чистый минимализм */
+    .card {
+      background: var(--white);
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    /* PROFILE */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .avatar-section {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .avatar-preview {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 4px solid var(--red-primary);
+      background: #fee2e2;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      object-fit: cover;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.2s ease;
+    }
+
+    .avatar-preview.has-image {
+      background: none;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .file-input { display: none; }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background: var(--white);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--red-primary);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    /* ADMIN PANEL */
+    .admin-panel {
+      display: none;
+      background: #fef2f2;
+      border: 2px solid var(--red-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .admin-panel.show {
+      display: block;
+    }
+
+    /* NEWS */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .news-item {
+      padding: 1.75rem;
+      border-left: 4px solid var(--red-primary);
+      background: #fafafa;
+    }
+
+    .news-item h3 {
+      color: #111827;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    .news-date {
+      color: var(--gray);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header-row {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .profile-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .nav-menu {
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-row">
+      <div class="logo-wrapper" id="logoHome">
+        <img class="logo-img" src="logo.png" alt="Логотип">
+        <span>Ассоциация</span>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#" class="nav-link active" id="navNews">Новости</a>
+        <a href="#" class="nav-link" id="navContacts">Контакты</a>
+        <div class="profile-section" id="profileSection" style="display: none;">
+          <div class="profile-btn" id="profileBtn">
+            <div class="profile-avatar" id="profileAvatar">С</div>
+            Личный кабинет
+          </div>
+        </div>
+      </nav>
+
+      <div class="auth-buttons" id="authButtons">
+        <button class="btn btn-secondary" id="loginBtn">Вход</button>
+        <button class="btn btn-primary" id="registerBtn">Регистрация</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="page active" id="pageHome">
+      <div class="card" style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <h1 class="section-title">Ассоциация выпускников</h1>
+        <p style="font-size: 1.2rem; color: #6b7280; max-width: 600px; margin: 0 auto;">
+          Сообщество студентов и профессионалов. Новости, контакты и личный кабинет.
+        </p>
+      </div>
+    </section>
+
+    <!-- NEWS -->
+    <section class="page" id="pageNews">
+      <h2 class="section-title">Новости</h2>
+      <div class="news-list" id="newsList"></div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section class="page" id="pageContacts">
+      <h2 class="section-title">Контакты</h2>
+      <div class="card">
+        <h3 style="color: var(--red-primary); margin-bottom: 1rem;">Администрация</h3>
+        <div style="display: grid; gap: 1rem;">
+          <div><strong>Email:</strong> admin@asso.ru</div>
+          <div><strong>Телефон:</strong> +7 (900) 123-45-67</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="page" id="pageProfile">
+      <h2 class="section-title">Личный кабинет</h2>
+      <div class="profile-grid">
+        <!-- Avatar -->
+        <div class="avatar-section card">
+          <div class="avatar-preview" id="avatarPreview">👤</div>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="avatarInput" accept="image/*">
+            <label for="avatarInput" class="btn btn-primary">📷 Загрузить фото</label>
+          </div>
+        </div>
+
+        <!-- Form + Admin -->
+        <div class="card">
+          <form id="profileForm">
+            <div class="form-group">
+              <label for="profileName">Имя</label>
+              <input type="text" id="profileName" required>
+            </div>
+            <div class="form-group">
+              <label for="profileEmail">Email</label>
+              <input type="email" id="profileEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="profileAbout">О себе</label>
+              <textarea id="profileAbout" rows="4" placeholder="Расскажите о себе..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Роль</label>
+              <input type="text" id="userRole" readonly>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Сохранить изменения</button>
+          </form>
+
+          <!-- Admin Panel -->
+          <div class="admin-panel" id="adminPanel">
+            <h3 style="color: var(--red-primary); margin-bottom: 1rem;">🛠️ Админ-панель</h3>
+            <form id="adminForm">
+              <div class="form-group">
+                <label for="postTitle">Заголовок новости</label>
+                <input type="text" id="postTitle" required placeholder="Введите заголовок">
+              </div>
+              <div class="form-group">
+                <label for="postContent">Текст новости</label>
+                <textarea id="postContent" rows="4" required placeholder="Текст новости..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Опубликовать новость</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Данные
+    let currentUser = {
+      loggedIn: false,
+      name: 'Пользователь',
+      email: 'stan@example.com',
+      about: 'О себе',
+      role: 'admin',
+      avatar: null
+    };
+
+    let news = [
+      { title: 'Запуск нового сайта', content: 'Полностью переработанный дизайн с личным кабинетом и админ-панелью.', date: '17.03.2026' },
+      { title: 'Встреча выпускников', content: 'Приглашаем на традиционную встречу 25 марта.', date: '15.03.2026' }
+    ];
+
+    // Навигация
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      
+      if (pageId === 'pageNews') document.getElementById('navNews').classList.add('active');
+      if (pageId === 'pageContacts') document.getElementById('navContacts').classList.add('active');
+    }
+
+    // Обновление UI авторизации
+    function updateAuthUI() {
+      const authBtn = document.getElementById('authButtons');
+      const profileSec = document.getElementById('profileSection');
+      
+      if (currentUser.loggedIn) {
+        authBtn.style.display = 'none';
+        profileSec.style.display = 'flex';
+        document.getElementById('profileAvatar').textContent = currentUser.name[0];
+        updateAdminPanel();
+        renderProfile();
+      } else {
+        authBtn.style.display = 'flex';
+        profileSec.style.display = 'none';
+      }
+    }
+
+    // Отрисовка профиля
+    function renderProfile() {
+      document.getElementById('profileName').value = currentUser.name;
+      document.getElementById('profileEmail').value = currentUser.email;
+      document.getElementById('profileAbout').value = currentUser.about;
+      document.getElementById('userRole').value = currentUser.role;
+    }
+
+    // Админ-панель
+    function updateAdminPanel() {
+      const panel = document.getElementById('adminPanel');
+      if (currentUser.loggedIn && currentUser.role === 'admin') {
+        panel.classList.add('show');
+      }
+    }
+
+    // Загрузка аватара
+    document.getElementById('avatarInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          currentUser.avatar = e.target.result;
+          const preview = document.getElementById('avatarPreview');
+          preview.src = currentUser.avatar;
+          preview.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Форма профиля
+    document.getElementById('profileForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      currentUser.name = document.getElementById('profileName').value;
+      currentUser.email = document.getElementById('profileEmail').value;
+      currentUser.about = document.getElementById('profileAbout').value;
+      
+      document.getElementById('profileAvatar').textContent = currentUser.name[0];
+      alert('✅ Профиль обновлен!');
+      updateAuthUI();
+    });
+
+    // Админ-форма
+    document.getElementById('adminForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('postTitle').value;
+      const content = document.getElementById('postContent').value;
+      
+      news.unshift({
+        title,
+        content,
+        date: new Date().toLocaleDateString('ru-RU')
+      });
+      
+      document.getElementById('adminForm').reset();
+      renderNews();
+      alert('✅ Новость опубликована!');
+    });
+
+    // Авторизация
+    document.getElementById('loginBtn').onclick = () => {
+      currentUser.loggedIn = true;
+      updateAuthUI();
+      alert('✅ Добро пожаловать!');
+    };
+
+    document.getElementById('registerBtn').onclick = () => {
+      currentUser.loggedIn = true;
+      currentUser.role = 'user';
+      updateAuthUI();
+      alert('✅ Регистрация завершена!');
+    };
+
+    // Навигация
+    document.getElementById('logoHome').onclick = () => showPage('pageHome');
+    document.getElementById('navNews').onclick = (e) => { e.preventDefault(); showPage('pageNews'); renderNews(); };
+    document.getElementById('navContacts').onclick = (e) => { e.preventDefault(); showPage('pageContacts'); };
+    document.getElementById('profileBtn').onclick = (e) => { e.preventDefault(); showPage('pageProfile'); };
+
+    // Отрисовка новостей
+    function renderNews() {
+      const container = document.getElementById('newsList');
+      container.innerHTML = news.map(item => `
+        <div class="news-item card">
+          <h3>${item.title}</h3>
+          <div class="news-date">${item.date}</div>
+          <p>${item.content}</p>
+        </div>
+      `).join('');
+    }
+
+    // Инициализация
+    renderNews();
+  </script>
+</body>
+</html>
