@@ -1,0 +1,7 @@
+{
+  "name": "asso-site",
+  "version": "1.0.0",
+  "dependencies": {
+    "@netlify/neon-http": "^1.0.0"
+  }
+}
